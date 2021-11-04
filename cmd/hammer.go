@@ -11,6 +11,7 @@ import (
 // hammerCmd represents the hammer command
 var hammerCmd = &cobra.Command{
 	Use:   "hammer",
+
 	Short: "If a hammer doesn't work, get a bigger hammer.",
 	Long: `Ah, how shall I do it?
 Oh, I know.
@@ -22,7 +23,8 @@ and then I'll mail that box to myself, and when it arrives...
 ...I'll smash it with a hammer!
 
 It's brilliant, brilliant, brilliant, I tell you!
-Genius, I say!`,
+Genius, I say!
+--------------------------------------------------------------------`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("If a hammer doesn't work, get a bigger hammer.")

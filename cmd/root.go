@@ -17,11 +17,9 @@ var Verbose bool
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "kronk",
-	Short: "The path that rocks",
-	Long: `I should tell you right now, I'm kind of hard to fit.
-I wear a 66 long and a 31 waist.
 
-He's not as dead as we would have hoped.`,
+	Short: "The path that rocks",
+	Long: `Hey, did you see that sky today -- Talk about blue!`,
 
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
