@@ -3,9 +3,7 @@ package cmd
 import (
   "fmt"
   "github.com/spf13/cobra"
-  "golang.org/x/sys/windows/registry"
   "log"
-  "syscall"
 )
 
 // watchemCmd represents the watchem command
@@ -18,66 +16,24 @@ var watchemCmd = &cobra.Command{
 For example, watch for when the proxy registry changes.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("watchem called")
+    //fmt.Println("watchem called")
+
     isVpn, err := cmd.Flags().GetBool("vpn")
-
-    k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.QUERY_VALUE)
-    if err != nil {
-      log.Fatal(err)
-    }
-    defer k.Close()
-
-    // -- auto config URL -----------
-    autoConfigUrl, _, errAutoConfig := k.GetStringValue("AutoConfigURL")
-    if errAutoConfig != nil && errAutoConfig != syscall.ENOENT {
-      log.Fatal(errAutoConfig)
-    }
-
-    // -- proxy enabled -----------
-    proxyEnabled, _, err := k.GetIntegerValue("ProxyEnable")
     if err != nil {
       log.Fatal(err)
     }
 
-    // -- proxy server -----------
-    proxyServer, _, err := k.GetStringValue("ProxyServer")
+    isProxy, problem, err := checkProxy(isVpn)
     if err != nil {
       log.Fatal(err)
     }
-
-
-    // -- Is there a proxy issue -----------
-    numProxies := 0
-    if isVpn {
-      if errAutoConfig != nil && errAutoConfig != syscall.ENOENT {
-        log.Fatal(errAutoConfig)
-      }
-      if errAutoConfig != syscall.ENOENT && len(autoConfigUrl) != 0 {
-        numProxies += 1
-      }
-
-      if proxyEnabled == 1 && len(proxyServer) > 0 {
-        numProxies += 1
-      }
-
-      if numProxies == 0 {
-        fmt.Println("Bad -- On VPN, but no autoConfigUrl or proxy")
-      } else if numProxies > 1 {
-        fmt.Println("Bad -- On VPN, but both autoconfig and proxy")
-      }
-
-    } else {
-      if len(autoConfigUrl) > 0 {
-        // This is bad, generally.
-        fmt.Println("Bad -- no-VPN but have autoConfigUrl:", autoConfigUrl)
-      }
-
-      if proxyEnabled == 1 && len(proxyServer) > 0 {
-        fmt.Println("Bad -- no-VPN but have proxy:", proxyServer)
-      }
+    if len(problem) > 0 {
+      fmt.Println(problem)
     }
 
+    fmt.Printf("Proxy enabled: %v\n", isProxy)
   },
+
 }
 
 func init() {
