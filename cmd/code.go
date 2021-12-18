@@ -11,13 +11,11 @@ import (
 // codeCmd represents the code command
 var codeCmd = &cobra.Command{
 	Use:   "code",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Do something with code / repos",
+	Long: `Do something with code / repos
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+code is fun.`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("code called")
 	},

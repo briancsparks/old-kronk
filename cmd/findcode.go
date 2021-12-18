@@ -10,7 +10,7 @@ import (
 
 // findcodeCmd represents the findcode command
 var findcodeCmd = &cobra.Command{
-	Use:   "findcode",
+	Use:   "findrepos",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
