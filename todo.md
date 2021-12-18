@@ -12,7 +12,7 @@
 * Multiple PNGs to multi-page PDF
 
 ```shell
-convert  page1.jpg page2.jpg page3.jpg -rotate 90 debbie-dentist.pdf
+convert  page1.jpg page2.jpg page3.jpg -rotate 90 output.pdf
 ```
 
 Force output type (jpeg):
@@ -36,3 +36,9 @@ previous_stage_in_pipeline | convert -filteroptions jpeg:- | next_stage_in_pipli
 ### ????
 
 * git status in prompt
+
+### DNS
+
+* Set A record
+
+

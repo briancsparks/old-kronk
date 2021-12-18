@@ -1,44 +1,45 @@
-/*
-Copyright © 2021 Brian C Sparks <briancsparks@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 package cmd
 
-import (
-	"fmt"
+/* Copyright © 2021 Brian C Sparks <briancsparks@gmail.com> -- MIT (see LICENSE file) */
 
-	"github.com/spf13/cobra"
+import (
+  "fmt"
+  "io/ioutil"
+  "path/filepath"
+
+  "github.com/spf13/cobra"
 )
 
 // iconsCmd represents the icons command
 var iconsCmd = &cobra.Command{
 	Use:   "icons",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Generate icons and graphics for projects.",
+	Long: `Generate icons and graphics for projects.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Long`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("icons called")
+
+    //file, err := ioutil.TempFile("", "prefix")
+    //check(err)
+    //defer os.Remove(file.Name())
+    //defer file.Close()
+
+    dir, err := ioutil.TempDir("", "kronk_icons")
+    check(err)
+    //defer os.RemoveAll(dir)
+
+    fmt.Println(dir)
+
+    convertArgs := []string{"-pointsize", "2400", "-fill", "royalblue", "-background", "none",
+      "-flatten", "-font", "Courier-New", "label:*IO", "-trim", "+repage", filepath.Join(dir, "icon.png")}
+
+    output, err := launchForResult("convert", convertArgs)
+    check(err)
+
+    <- output
+    //fmt.Println(<- output)
 	},
 }
 
