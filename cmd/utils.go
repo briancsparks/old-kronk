@@ -8,3 +8,42 @@ func checkU(err error) {
   }
 }
 
+func q(s string) string {
+  return "\"" + s + "\""
+}
+
+func qq(ss []string) []string {
+  r := make([]string, 0)
+  for _, s := range ss {
+    r = append(r, q(s))
+  }
+  return r
+}
+
+func smap(ss []string, fn func(string) string) (res []string) {
+  res = make([]string, 0)
+  for _, s := range ss {
+    res = append(res, fn(s))
+  }
+  return
+}
+
+func keyMirror(ss []string) (res map[string]string) {
+  res = make(map[string]string)
+  for _, s := range ss {
+    res[s] = s
+  }
+  return
+}
+
+func keys(m map[string]string) (res []string) {
+  res = make([]string, 0)
+  for k, _ := range m {
+    res = append(res, k)
+  }
+  return
+}
+
+
+
+

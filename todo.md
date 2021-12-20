@@ -41,4 +41,8 @@ previous_stage_in_pipeline | convert -filteroptions jpeg:- | next_stage_in_pipli
 
 * Set A record
 
+## The WSL2 Make-Right-er Tool
+
+* Where did those scripts go?
+
 
