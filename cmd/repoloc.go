@@ -12,7 +12,7 @@ import (
 
 
 
-func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files []string) ([]string, []string)) (chan entryInfo, chan entryInfo, error) {
+func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files []string) ([]string, []string, []string)) (chan entryInfo, chan entryInfo, error) {
   filesChan := make(chan entryInfo)
   dirsChan := make(chan entryInfo)
 
@@ -20,6 +20,7 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
 
   go func() {
     defer close(filesChan)
+    defer close(dirsChan)
 
     var wgCodeRoots sync.WaitGroup
     for _, root := range codeRootsIn {
@@ -57,11 +58,11 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
             }
 
             // Call the callback
-            found, moreOf := stopper(onePath, dirs, files)
+            found, moreOf, moreFiles := stopper(onePath, dirs, files)
 
 
             // Send files to the channel
-            for _, file := range files {
+            for _, file := range moreFiles {
               filesChan <- entryInfo{name: file, root: root}
             }
 
@@ -71,8 +72,8 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
 
             // Send the requested sub-dirs
             for _, dir := range moreOf {
-              wgOnePath.Add(1)
               vverbose(fmt.Sprintf("  -----  MoreOf: %v\n", dir))
+              wgOnePath.Add(1)
               go doOnePath(dir, root)
             }
 

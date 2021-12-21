@@ -15,6 +15,7 @@ var cfgFile string
 var Verbose bool
 var VVerbose bool
 var VVVerbose bool
+var VVVVerbose bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -55,6 +56,9 @@ func init() {
   rootCmd.PersistentFlags().BoolVarP(&VVVerbose, "vvverbose", "", false, "vvverbose output")
   viper.BindPFlag("vvverbose", rootCmd.PersistentFlags().Lookup("vvverbose"))
 
+  rootCmd.PersistentFlags().BoolVarP(&VVVVerbose, "vvvverbose", "", false, "vvvverbose output")
+  viper.BindPFlag("vvvverbose", rootCmd.PersistentFlags().Lookup("vvvverbose"))
+
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
@@ -87,6 +91,12 @@ func initConfig() {
 }
 
 func rootInitForSub() {
+  if VVVVerbose {
+    VVVerbose = true
+    VVerbose = true
+    Verbose  = true
+  }
+
   if VVVerbose {
     VVerbose = true
     Verbose  = true

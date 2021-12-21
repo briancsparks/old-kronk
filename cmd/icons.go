@@ -35,7 +35,7 @@ Long`,
     convertArgs := []string{"-pointsize", "2400", "-fill", "royalblue", "-background", "none",
       "-flatten", "-font", "Courier-New", "label:*IO", "-trim", "+repage", filepath.Join(dir, "icon.png")}
 
-    output, err := launchForResult("convert", convertArgs)
+    output, err := launch4Result("convert", convertArgs)
     check(err)
 
     <- output
