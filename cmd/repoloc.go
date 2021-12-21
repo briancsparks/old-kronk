@@ -66,11 +66,12 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
               filesChan <- entryInfo{name: file, root: root}
             }
 
+            // Send the found items out
             for _, dir := range found {
               dirsChan <- entryInfo{name: dir, root: root}
             }
 
-            // Send the requested sub-dirs
+            // Recurse into the requested sub-dirs
             for _, dir := range moreOf {
               vverbose(fmt.Sprintf("  -----  MoreOf: %v\n", dir))
               wgOnePath.Add(1)

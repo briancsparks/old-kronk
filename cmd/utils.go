@@ -3,6 +3,7 @@ package cmd
 import (
   "log"
   "path/filepath"
+  "strings"
 )
 
 func checkU(err error) {
@@ -76,4 +77,13 @@ func appendPath(suffix string) func(s string) string {
   }
 }
 
+func cygpath(s string) string {
+  if len(s) < 2 || s[1] != ':' {
+    return s
+  }
+
+  drive := strings.ToLower(s[0:1])
+  path := strings.Replace("/cygdrive/" + drive + s[2:], "\\", "/", -1)
+  return path
+}
 

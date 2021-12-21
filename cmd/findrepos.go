@@ -13,7 +13,6 @@ import (
   "path/filepath"
   "strings"
   "sync"
-  "time"
 )
 
 // findreposCmd represents the findcode command
@@ -77,13 +76,7 @@ func find() {
 
   vverbose(fmt.Sprintf("codeRoots: %v\n", codeRoots))
 
-  t :=time.Now()
-
   shouldStop := func (dirname string, shortDirsIn, shortFilesIn []string) ( /*found*/ []string, /*moreOf*/ []string, /*moreFiles*/ []string) {
-    if time.Since(t).Seconds() > 1 {
-      vvvverbose(fmt.Sprintf("  ----- Looking at %s\n", dirname))
-      t = time.Now()
-    }
 
     dirsIn := smap(shortDirsIn, prependPath(dirname))
     filesIn := smap(shortFilesIn, prependPath(dirname))
@@ -136,24 +129,6 @@ func find() {
     }
   }()
 
-
-  //for i := 0;; i++ {
-  //  select {
-  //  case dir := <- dirs:
-  //   i *= 1
-  //   //fmt.Printf("%s\n", dir.name)
-  //   wg.Add(1)
-  //   go func() {
-  //     defer wg.Done()
-  //     checkDir(dir)
-  //   }()
-  //
-  //  case <-files:
-  //    i *= 1
-  //    //fmt.Printf("File: %s\n", file.name)
-  //  }
-  //}
-
   wg.Wait()
 }
 
@@ -172,10 +147,10 @@ func checkDir(dir entryInfo) {
 
     originUrl := <-output
     if len(originUrl) > 0 {
-      fmt.Printf("%-104s %s\n", originUrl, dir.name)
-      //fmt.Printf("gitUrl: %s\n        %s\n", originUrl, dir.name)
-    //} else {
-    //  fmt.Printf("Empty:  %s\n", dir.name)
+      //path := strings.Replace("/cygdrive/" + dir.name[0:1] + dir.name[2:], "\\", "/", -1)
+
+      path := cygpath(dir.name)
+      fmt.Printf("%-94s %s\n", originUrl, path)
     }
   }
 }
