@@ -29,11 +29,11 @@ func launchForResult(exename string , args []string) (chan string, error) {
     //cmd.Stderr = &stderr
 
     if err = cmd.Start(); err != nil {
-      log.Fatal(err)                          /* probably shouldn't exit */
+      log.Panic(err)                          /* probably shouldn't exit */
     }
 
     if err = cmd.Wait(); err != nil {
-      log.Fatal(err)                          /* probably shouldn't exit */
+      log.Panic(err)                          /* probably shouldn't exit */
     }
 
     out <- stdout.String()

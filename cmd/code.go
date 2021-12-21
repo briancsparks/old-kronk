@@ -17,6 +17,7 @@ var codeCmd = &cobra.Command{
 code is fun.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
+    codeInitForSub()
 		fmt.Println("code called")
 	},
 }
@@ -34,3 +35,9 @@ func init() {
 	// is called directly, e.g.:
 	// codeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+
+func codeInitForSub() {
+  rootInitForSub()
+}
+

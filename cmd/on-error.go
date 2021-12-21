@@ -1,7 +1,6 @@
 package cmd
 
 import (
-  "fmt"
   "log"
 )
 
@@ -46,7 +45,7 @@ func check(err error) {
     // deadly check, but want log-and-continue... for temporarily blasting past situations
     // that are not handled yet, and are not really deadly (like in active development.)
     if modeOnDeadlyError == OnErrorLogAndContinue {
-      fmt.Println(err)
+      log.Println(err)
       return
     }
 
@@ -72,12 +71,12 @@ func check2(err error) bool {
     }
 
     if mode == OnErrorLogAndContinue {
-      fmt.Println(err)
+      log.Println(err)
       return false
     }
 
     if mode == OnErrorPropigate {
-      fmt.Println(err)
+      log.Println(err)
       return true
     }
 

@@ -1,6 +1,9 @@
 package cmd
 
-import "log"
+import (
+  "log"
+  "path/filepath"
+)
 
 func checkU(err error) {
   if err != nil {
@@ -36,6 +39,12 @@ func keyMirror(ss []string) (res map[string]string) {
   return
 }
 
+func keyMirror1(s string) (res map[string]string) {
+  res = make(map[string]string)
+  res[s] = s
+  return
+}
+
 func keys(m map[string]string) (res []string) {
   res = make([]string, 0)
   for k, _ := range m {
@@ -44,6 +53,23 @@ func keys(m map[string]string) (res []string) {
   return
 }
 
+func slc(s string) []string {
+  return []string{s}
+}
 
+//dirsIn := smap(shortDirsIn, func(s string) string { return filepath.Join(dirname, s) })
+//dirsIn := smap(shortDirsIn, prependPath(dirname))
+
+func prependPath(pre string) func(s string) string {
+  return func(s string) string {
+    return filepath.Join(pre, s)
+  }
+}
+
+func appendPath(suffix string) func(s string) string {
+  return func(s string) string {
+    return filepath.Join(s, suffix)
+  }
+}
 
 

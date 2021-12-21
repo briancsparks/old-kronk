@@ -13,6 +13,8 @@ import (
 
 var cfgFile string
 var Verbose bool
+var VVerbose bool
+var VVVerbose bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -43,8 +45,15 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kronk.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+
+  rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+  viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+
+  rootCmd.PersistentFlags().BoolVarP(&VVerbose, "vverbose", "", false, "vverbose output")
+  viper.BindPFlag("vverbose", rootCmd.PersistentFlags().Lookup("vverbose"))
+
+  rootCmd.PersistentFlags().BoolVarP(&VVVerbose, "vvverbose", "", false, "vvverbose output")
+  viper.BindPFlag("vvverbose", rootCmd.PersistentFlags().Lookup("vvverbose"))
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -75,4 +84,15 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func rootInitForSub() {
+  if VVVerbose {
+    VVerbose = true
+    Verbose  = true
+  }
+
+  if VVerbose {
+    Verbose  = true
+  }
 }
