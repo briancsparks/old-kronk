@@ -57,6 +57,10 @@ func slc(s string) []string {
   return []string{s}
 }
 
+func slc0() []string {
+  return []string{}
+}
+
 //dirsIn := smap(shortDirsIn, func(s string) string { return filepath.Join(dirname, s) })
 //dirsIn := smap(shortDirsIn, prependPath(dirname))
 

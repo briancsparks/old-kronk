@@ -80,21 +80,12 @@ func find() {
     dirs := keyMirror(dirsIn)
     files := keyMirror(filesIn)
 
-    wantMore := true
-    found := make(map[string]string)
-
     if _, ok := dirs[filepath.Join(dirname, ".git")]; ok {
-      found[dirname] = dirname
-      wantMore = false
+      return slc(dirname), []string{}
     }
 
     if _, ok := files[filepath.Join(dirname, "package.json")]; ok {
-      found[dirname] = dirname
-      wantMore = false
-    }
-
-    if !wantMore {
-      return keys(found), []string{}
+      return slc(dirname), []string{}
     }
 
     moreOf := make([]string, 0)
@@ -104,7 +95,7 @@ func find() {
       }
     }
 
-    return keys(found), moreOf
+    return []string{}, moreOf
   }
 
   files, dirs, err := superWalk(codeRoots, shouldStop)
