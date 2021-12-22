@@ -27,7 +27,7 @@ Long`,
     //defer file.Close()
 
     dir, err := ioutil.TempDir("", "kronk_icons")
-    check(err)
+    Check(err)
     //defer os.RemoveAll(dir)
 
     fmt.Println(dir)
@@ -36,7 +36,7 @@ Long`,
       "-flatten", "-font", "Courier-New", "label:*IO", "-trim", "+repage", filepath.Join(dir, "icon.png")}
 
     output, err := launch4Result("convert", convertArgs)
-    check(err)
+    Check(err)
 
     <- output
     //fmt.Println(<- output)

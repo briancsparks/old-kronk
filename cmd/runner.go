@@ -31,18 +31,18 @@ func launch4Result(exename string , args []string) (chan string, error) {
   //  //var stderr bytes.Buffer
   //  //cmd.Stderr = &stderr
   //
-  //  verbose0(fmt.Sprintf("  ----- launch: %s, %v\n", exepath, args))
+  //  Verbose0(fmt.Sprintf("  ----- launch: %s, %v\n", exepath, args))
   //  //fmt.Println(exepath, args)
   //  if err = cmd.Start(); err != nil {
   //    log.Panic(err)                          /* probably shouldn't exit */
   //  }
   //
-  //  verbose0(fmt.Sprintf("  ----- launch2: %s, %v\n", exepath, args))
+  //  Verbose0(fmt.Sprintf("  ----- launch2: %s, %v\n", exepath, args))
   //  if err = cmd.Wait(); err != nil {
   //    log.Panic(err)                          /* probably shouldn't exit */
   //  }
   //
-  //  verbose0(fmt.Sprintf("  ----- launch3: %s, %v\n        %s\n", exepath, args, stdout))
+  //  Verbose0(fmt.Sprintf("  ----- launch3: %s, %v\n        %s\n", exepath, args, stdout))
   //  out <- stdout.String()
   //}()
   //
@@ -76,13 +76,13 @@ func launchForResult(exename string, args []string, cwd string, deffault string)
     //var stderr bytes.Buffer
     //cmd.Stderr = &stderr
 
-    //verbose0(fmt.Sprintf("  ----- launch: %s, %v\n", exepath, args))
+    //Verbose0(fmt.Sprintf("  ----- launch: %s, %v\n", exepath, args))
     //fmt.Println(exepath, args)
     if err = cmd.Start(); err != nil {
       log.Panic(err)                          /* probably shouldn't exit */
     }
 
-    //verbose0(fmt.Sprintf("  ----- launch2: %s, %v\n", exepath, args))
+    //Verbose0(fmt.Sprintf("  ----- launch2: %s, %v\n", exepath, args))
     if err = cmd.Wait(); err == nil {
       res = strings.TrimSpace(stdout.String())
 
@@ -90,7 +90,7 @@ func launchForResult(exename string, args []string, cwd string, deffault string)
       // See if the cmd exited with code != 0
       if exitErr, isExitError := err.(*exec.ExitError); isExitError {
         if status, isWaitStatus := exitErr.Sys().(syscall.WaitStatus); isWaitStatus {
-          vvvverbose(fmt.Sprintf("  -- ExitFor(%s): %d\n", cmd.Dir, status.ExitStatus()))
+          Vvvverbose(fmt.Sprintf("  -- ExitFor(%s): %d\n", cmd.Dir, status.ExitStatus()))
 
           res = deffault
         }
@@ -98,7 +98,7 @@ func launchForResult(exename string, args []string, cwd string, deffault string)
       //log.Panic(err)                          /* probably shouldn't exit */
     }
 
-    //verbose0(fmt.Sprintf("  ----- launch3: %s, %v\n        %s\n", exepath, args, res))
+    //Verbose0(fmt.Sprintf("  ----- launch3: %s, %v\n        %s\n", exepath, args, res))
     out <- res
   }()
 

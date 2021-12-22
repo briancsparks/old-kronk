@@ -11,11 +11,11 @@ var (
 func init() {
   var err error
   fixed_UserHomeDir, err = os.UserHomeDir()
-  check(err)
+  Check(err)
   fixed_UserCacheDir, err = os.UserCacheDir()
-  check(err)
+  Check(err)
   fixed_UserConfigDir, err = os.UserConfigDir()
-  check(err)
+  Check(err)
 }
 
 func os_UserHomeDir() string {

@@ -12,10 +12,10 @@ import (
 )
 
 var cfgFile string
-var Verbose bool
-var VVerbose bool
-var VVVerbose bool
-var VVVVerbose bool
+var IsVerbose bool
+var IsVverbose bool
+var IsVvverbose bool
+var IsVvvverbose bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -47,16 +47,16 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kronk.yaml)")
 
-  rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+  rootCmd.PersistentFlags().BoolVarP(&IsVerbose, "verbose", "v", false, "Verbose output")
   viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 
-  rootCmd.PersistentFlags().BoolVarP(&VVerbose, "vverbose", "", false, "vverbose output")
+  rootCmd.PersistentFlags().BoolVarP(&IsVverbose, "vverbose", "", false, "Vverbose output")
   viper.BindPFlag("vverbose", rootCmd.PersistentFlags().Lookup("vverbose"))
 
-  rootCmd.PersistentFlags().BoolVarP(&VVVerbose, "vvverbose", "", false, "vvverbose output")
+  rootCmd.PersistentFlags().BoolVarP(&IsVvverbose, "vvverbose", "", false, "vvverbose output")
   viper.BindPFlag("vvverbose", rootCmd.PersistentFlags().Lookup("vvverbose"))
 
-  rootCmd.PersistentFlags().BoolVarP(&VVVVerbose, "vvvverbose", "", false, "vvvverbose output")
+  rootCmd.PersistentFlags().BoolVarP(&IsVvvverbose, "vvvverbose", "", false, "Vvvverbose output")
   viper.BindPFlag("vvvverbose", rootCmd.PersistentFlags().Lookup("vvvverbose"))
 
 	// Cobra also supports local flags, which will only run
@@ -91,18 +91,18 @@ func initConfig() {
 }
 
 func rootInitForSub() {
-  if VVVVerbose {
-    VVVerbose = true
-    VVerbose = true
-    Verbose  = true
+  if IsVvvverbose {
+    IsVvverbose = true
+    IsVverbose = true
+    IsVerbose = true
   }
 
-  if VVVerbose {
-    VVerbose = true
-    Verbose  = true
+  if IsVvverbose {
+    IsVverbose = true
+    IsVerbose = true
   }
 
-  if VVerbose {
-    Verbose  = true
+  if IsVverbose {
+    IsVerbose = true
   }
 }

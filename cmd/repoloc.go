@@ -36,7 +36,7 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
           doOnePath = func(onePath, rootDir string) {
             defer wgOnePath.Done()
 
-            verbose(fmt.Sprintf("Processing: %s\n", onePath))
+            Verbose(fmt.Sprintf("Processing: %s\n", onePath))
 
             // Make sure we only do it once
             if onePath != rootDir {
@@ -73,13 +73,13 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
 
             // Recurse into the requested sub-dirs
             for _, dir := range moreOf {
-              vverbose(fmt.Sprintf("  -----  MoreOf: %v\n", dir))
+              Vverbose(fmt.Sprintf("  -----  MoreOf: %v\n", dir))
               wgOnePath.Add(1)
               go doOnePath(dir, root)
             }
 
             if len(moreOf) == 0 {
-              vvverbose(fmt.Sprintf("  -----  MoreOf: %v\n", moreOf))
+              Vvverbose(fmt.Sprintf("  -----  MoreOf: %v\n", moreOf))
             }
           }
           // ------------------

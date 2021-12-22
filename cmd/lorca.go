@@ -3,8 +3,9 @@ package cmd
 /* Copyright © 2021 Brian C Sparks <briancsparks@gmail.com> -- MIT (see LICENSE file) */
 
 import (
-	"fmt"
+  "fmt"
   "net"
+  "net/http"
   "os"
   "os/signal"
   "runtime"
@@ -23,20 +24,26 @@ Lorca, I say.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
     fmt.Println("lorca called")
-    
+
     lorcaArgs := make([]string, 0)
     if runtime.GOOS == "linux" {
       lorcaArgs = append(lorcaArgs, "--class=Lorca")
     }
 
     ui, err := lorca.New("", "", 800, 600, lorcaArgs...)
-    check(err)
+    Check(err)
     defer ui.Close()
 
     // connect to FS (fileServer pointing to folder www)
     listener, err := net.Listen("tcp", "127.0.0.1:0")
-    check(err)
+    Check(err)
     defer listener.Close()
+
+    // Start the server, serving the FS
+    go http.Serve(listener, http.FileServer(FS))
+
+    err = ui.Load(fmt.Sprintf("http://%s", listener.Addr()))
+    Check(err)
 
     // os signal handling
     sigc := make(chan os.Signal)

@@ -2,7 +2,9 @@ package cmd
 
 import (
   "log"
+  "path"
   "path/filepath"
+  "runtime"
   "strings"
 )
 
@@ -85,5 +87,21 @@ func cygpath(s string) string {
   drive := strings.ToLower(s[0:1])
   path := strings.Replace("/cygdrive/" + drive + s[2:], "\\", "/", -1)
   return path
+}
+
+func MyFileName() string {
+  _, filename, _, ok := runtime.Caller(1)
+  if ok {
+    return filename
+  }
+  return ""
+}
+
+func MyDirName() string {
+  _, filename, _, ok := runtime.Caller(1)
+  if ok {
+    return path.Dir(filename)
+  }
+  return ""
 }
 

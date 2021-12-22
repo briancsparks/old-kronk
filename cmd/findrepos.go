@@ -25,9 +25,9 @@ Looks in all the usual places and lists what repo is where.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
     findreposInitForSub()
-    //log.Printf("findr1: %v, %v, %v\n", Verbose, VVerbose, VVVerbose)
+    //log.Printf("findr1: %v, %v, %v\n", IsVerbose, IsVverbose, IsVvverbose)
 
-    verbose(fmt.Sprintln("findrepos called"))
+    Verbose(fmt.Sprintln("findrepos called"))
     find()
 	},
 }
@@ -65,16 +65,16 @@ func find() {
   userRepoRoots := os_UserHomeDirs()
   userRepoRoots = append(userRepoRoots, "D:\\data")
 
-  if Verbose {
+  if IsVerbose {
     for _, roots := range userRepoRoots {
-      verprint(fmt.Sprintf("Root: %s\n", roots))
+      Verprint(fmt.Sprintf("Root: %s\n", roots))
     }
   }
 
   codeRoots, err := codeDirs(userRepoRoots)
-  check(err)
+  Check(err)
 
-  vverbose(fmt.Sprintf("codeRoots: %v\n", codeRoots))
+  Vverbose(fmt.Sprintf("codeRoots: %v\n", codeRoots))
 
   shouldStop := func (dirname string, shortDirsIn, shortFilesIn []string) ( /*found*/ []string, /*moreOf*/ []string, /*moreFiles*/ []string) {
 
@@ -102,7 +102,7 @@ func find() {
   }
 
   files, dirs, err := superWalk(codeRoots, shouldStop)
-  check(err)
+  Check(err)
 
   i := 10
   var wg sync.WaitGroup
@@ -133,17 +133,17 @@ func find() {
 }
 
 func checkDir(dir entryInfo) {
-  verbose(fmt.Sprintf("  ---- checkDir: %s\n", dir.name))
+  Verbose(fmt.Sprintf("  ---- checkDir: %s\n", dir.name))
   gitConfigFile := filepath.Join(dir.name, ".git", "config")
 
   _, err := os.Stat(gitConfigFile)
   if err == nil || os.IsExist(err) {
-    //verbose0(fmt.Sprintf("gitConfigFile: %s\n", gitConfigFile))
+    //Verbose0(fmt.Sprintf("gitConfigFile: %s\n", gitConfigFile))
 
     gitArgs := []string{"config", "--get", "remote.origin.url"}
 
     output, err := launchForResult("git", gitArgs, dir.name, "")
-    check(err)
+    Check(err)
 
     originUrl := <-output
     if len(originUrl) > 0 {

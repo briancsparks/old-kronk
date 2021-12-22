@@ -2,35 +2,35 @@ package cmd
 
 import "log"
 
-func verbose0(s string) {
+func Verbose0(s string) {
   log.Printf("%s", s)
 }
 
-func verbose(s string) {
-  if Verbose {
+func Verbose(s string) {
+  if IsVerbose {
     log.Printf("%s", s)
   }
 }
 
-func vverbose(s string) {
-  if VVerbose {
+func Vverbose(s string) {
+  if IsVverbose {
     log.Printf("%s", s)
   }
 }
 
-func vvverbose(s string) {
-  if VVVerbose {
+func Vvverbose(s string) {
+  if IsVvverbose {
     log.Printf("%s", s)
   }
 }
 
-func vvvverbose(s string) {
-  if VVVVerbose {
+func Vvvverbose(s string) {
+  if IsVvvverbose {
     log.Printf("%s", s)
   }
 }
 
-func verprint(s string) {
+func Verprint(s string) {
   log.Printf("%s", s)
 }
 
