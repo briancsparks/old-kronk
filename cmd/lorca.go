@@ -14,6 +14,9 @@ import (
   "github.com/zserge/lorca"
 )
 
+var width int
+var height int
+
 // lorcaCmd represents the lorca command
 var lorcaCmd = &cobra.Command{
 	Use:   "lorca",
@@ -30,7 +33,7 @@ Lorca, I say.`,
       lorcaArgs = append(lorcaArgs, "--class=Lorca")
     }
 
-    ui, err := lorca.New("", "", 800, 600, lorcaArgs...)
+    ui, err := lorca.New("", "", width, height, lorcaArgs...)
     Check(err)
     defer ui.Close()
 
@@ -65,6 +68,8 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// lorcaCmd.PersistentFlags().String("foo", "", "A help for foo")
+  lorcaCmd.PersistentFlags().IntVarP(&width, "width", "w", 1600, "Window width")
+  lorcaCmd.PersistentFlags().IntVarP(&height, "height", "", 1000, "Window height")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
