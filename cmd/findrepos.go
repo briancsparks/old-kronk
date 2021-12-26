@@ -15,7 +15,7 @@ import (
   "sync"
 )
 
-// findreposCmd represents the findcode command
+// findreposCmd represents the findrepos (kronk code findrepos) command
 var findreposCmd = &cobra.Command{
 	Use:   "findrepos",
 	Short: "Find and list all repos",
@@ -57,8 +57,9 @@ func init() {
 }
 
 type entryInfo struct {
-  name string
-  root string
+  super  *superDir
+  name    string
+  root    string
 }
 
 func find() {
@@ -71,7 +72,7 @@ func find() {
     }
   }
 
-  codeRoots, err := codeDirs(userRepoRoots)
+  codeRoots, err := existingCodeDirs(userRepoRoots)
   Check(err)
 
   Vverbose(fmt.Sprintf("codeRoots: %v\n", codeRoots))
@@ -101,12 +102,14 @@ func find() {
     return []string{}, moreOf, []string{}
   }
 
-  files, dirs, err := superWalk(codeRoots, shouldStop)
+  // Start the walk
+  files, dirs, err := repoLocWalk(codeRoots, shouldStop)
   Check(err)
 
   i := 10
   var wg sync.WaitGroup
 
+  // Consume all files found
   wg.Add(1)
   go func() {
     defer wg.Done()
@@ -116,6 +119,7 @@ func find() {
     }
   }()
 
+  // Consume dirs found
   wg.Add(1)
   go func() {
     defer wg.Done()
@@ -124,6 +128,8 @@ func find() {
       wg.Add(1)
       go func(dir entryInfo) {
         defer wg.Done()
+
+        // Do something with the dir
         checkDir(dir)
       }(dir)
     }
@@ -138,7 +144,6 @@ func checkDir(dir entryInfo) {
 
   _, err := os.Stat(gitConfigFile)
   if err == nil || os.IsExist(err) {
-    //Verbose0(fmt.Sprintf("gitConfigFile: %s\n", gitConfigFile))
 
     gitArgs := []string{"config", "--get", "remote.origin.url"}
 
@@ -147,10 +152,18 @@ func checkDir(dir entryInfo) {
 
     originUrl := <-output
     if len(originUrl) > 0 {
-      //path := strings.Replace("/cygdrive/" + dir.name[0:1] + dir.name[2:], "\\", "/", -1)
+      if strings.Contains(originUrl, "briancsparks") {
 
-      path := cygpath(dir.name)
-      fmt.Printf("%-94s %s\n", originUrl, path)
+        gitStatusChan, err := launchForResult("git", []string{"status", "--short"}, dir.name, "")
+        Check(err)
+
+        gitStatus := <-gitStatusChan
+
+        if len(gitStatus) > 0 {
+          fmt.Printf("%-94s %s\n", originUrl, cygpath(dir.name))
+          fmt.Printf("=======================\n%s\ngit status: %s\n------------------------\n", dir.name, gitStatus)
+        }
+      }
     }
   }
 }

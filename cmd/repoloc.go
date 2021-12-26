@@ -10,9 +10,14 @@ import (
 
 /* Copyright © 2021 Brian C Sparks <briancsparks@gmail.com> -- MIT (see LICENSE file) */
 
+var projectDirNames []string
 
+func init() {
+  projectDirNames = []string{"AndroidStudioProjects", "EclipseProjects", "GolandProjects", "JordanProjects","vc2019projects","CLionProjects",
+    "GameProjects","IdeaProjects","PycharmProjects", "VcProjects", "WebStormProjects"}
+}
 
-func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files []string) ([]string, []string, []string)) (chan entryInfo, chan entryInfo, error) {
+func repoLocWalk(codeRootsIn []string, stopper func (dirname string, dirs, files []string) ([]string, []string, []string)) (chan entryInfo, chan entryInfo, error) {
   filesChan := make(chan entryInfo)
   dirsChan := make(chan entryInfo)
 
@@ -98,11 +103,12 @@ func superWalk(codeRootsIn []string, stopper func (dirname string, dirs, files [
   return filesChan, dirsChan, nil
 }
 
-
-
-func codeDirs(homeDirs []string) ([]string, error) {
+// existingCodeDirs builds a slice of strings, where each entry is the 'root' of
+// a source tree. Filters out potential dirs that do not exist.
+func existingCodeDirs(homeDirs []string) ([]string, error) {
   var result []string
 
+  // Add 'dev', 'projects', and 'go' to each homeDir
   var dirs1 []string
   for _, homeDir := range homeDirs {
     dirs1 = append(dirs1, homeDir)
@@ -111,9 +117,6 @@ func codeDirs(homeDirs []string) ([]string, error) {
     dirs1 = append(dirs1, filepath.Join(homeDir, "go"))
   }
 
-  var projectDirNames = []string{"AndroidStudioProjects", "EclipseProjects", "GolandProjects", "JordanProjects","vc2019projects","CLionProjects",
-    "GameProjects","IdeaProjects","PycharmProjects", "VcProjects", "WebStormProjects"}
-
   var dirs2 []string
   for _, dir1 := range dirs1 {
     for _, name := range projectDirNames {
@@ -121,8 +124,10 @@ func codeDirs(homeDirs []string) ([]string, error) {
     }
   }
 
+  // All the dirs we have found
   roots := append(dirs2, dirs1...)
 
+  // Keep the dirs that actually exist
   dirs3 := dirs2[:0]
   for _, root := range roots {
     _, err := os.Stat(root)

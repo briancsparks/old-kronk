@@ -28,7 +28,12 @@ func onDeadly(newMode int) {
 }
 
 func Check(err error) {
+  CheckMsg(err, "")
+}
+
+func CheckMsg(err error, msg string) {
   if err != nil {
+
     if modeOnDeadlyError == OnErrorPanic {
       log.Panicln(err)
       return

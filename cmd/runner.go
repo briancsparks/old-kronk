@@ -7,6 +7,7 @@ import (
   "os/exec"
   "strings"
   "syscall"
+  "time"
 )
 
 func launch4Result(exename string , args []string) (chan string, error) {
@@ -62,6 +63,8 @@ func launchForResult(exename string, args []string, cwd string, deffault string)
   go func() {
     defer close(out)
 
+    start := time.Now()
+
     res := deffault
 
     cmd := exec.Command(exepath, args...)
@@ -99,6 +102,7 @@ func launchForResult(exename string, args []string, cwd string, deffault string)
     }
 
     //Verbose0(fmt.Sprintf("  ----- launch3: %s, %v\n        %s\n", exepath, args, res))
+    Verbose(fmt.Sprintf("  ----- [%4d] launch: %s> %s, %v ==> %s\n", time.Since(start).Milliseconds(), cwd, exepath, args, res))
     out <- res
   }()
 
